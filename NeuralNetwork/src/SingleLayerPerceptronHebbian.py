@@ -6,6 +6,7 @@ Created on 5 de dez de 2017
 import numpy as np
 import MathUtils
 import SampleData
+import PlotUtils
 
 class SingleLayerPerceptronHebbian:
 
@@ -13,6 +14,8 @@ class SingleLayerPerceptronHebbian:
         print('SingleLayerPerceptronHebbian')
 
     def train(self, x, d, n):
+        plot_data_x = []
+        plot_data_y = []
         k = len(x)
         w = np.random.rand(k-1)
         epoch = 0
@@ -27,6 +30,9 @@ class SingleLayerPerceptronHebbian:
                     error = True
             epoch = epoch + 1
             print('epoch = {}\tw = {}\terror={}'.format(epoch, w, error))
+            plot_data_x.append(epoch)
+            plot_data_y.append(error)
+        PlotUtils.plot(plot_data_x, 'epoch', plot_data_y, 'error')
         return w
             
     def test(self, w, x):

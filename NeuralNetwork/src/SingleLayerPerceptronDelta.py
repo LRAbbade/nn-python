@@ -6,6 +6,7 @@ Created on 5 de dez de 2017
 import numpy as np
 import MathUtils
 import SampleData
+import PlotUtils
 
 class SingleLayerPerceptronDelta:
 
@@ -13,6 +14,8 @@ class SingleLayerPerceptronDelta:
         print('SingleLayerPerceptronDelta')
 
     def train(self, x, d, n, e):
+        plot_data_x = []
+        plot_data_y = []
         k = len(x)
         w = np.random.rand(k-1)
         epoch = 0
@@ -23,9 +26,13 @@ class SingleLayerPerceptronDelta:
                 w = np.add(w, np.multiply(x[i], n * (d[i] - v)))
             epoch = epoch + 1
             eqm_curr = MathUtils.eqm(w, x, d)
-            print('epoch = {}\tw = {}\teqm = {}'.format(epoch, w, eqm_curr - eqm_prev))
+            eqm_delta = abs(eqm_curr - eqm_prev)
+            print('epoch = {}\tw = {}\teqm = {}'.format(epoch, w, eqm_delta))
+            plot_data_x.append(epoch)
+            plot_data_y.append(eqm_delta)
             if abs(eqm_curr - eqm_prev) < e:
                 break
+        PlotUtils.plot(plot_data_x, 'epoch', plot_data_y, 'eqm')
         return w
             
     def test(self, w, x):
