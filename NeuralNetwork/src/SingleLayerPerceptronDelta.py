@@ -4,8 +4,8 @@ Created on 5 de dez de 2017
 @author: marcelovca90
 '''
 import numpy as np
-import SampleData
 import MathUtils
+import SampleData
 
 class SingleLayerPerceptronDelta:
 
@@ -13,8 +13,8 @@ class SingleLayerPerceptronDelta:
         print('SingleLayerPerceptronDelta')
 
     def train(self, x, d, n, e):
-        k = len(x[0])
-        w = np.random.rand(k)
+        k = len(x)
+        w = np.random.rand(k-1)
         epoch = 0
         while True:
             eqm_prev = MathUtils.eqm(w, x, d)
@@ -23,7 +23,7 @@ class SingleLayerPerceptronDelta:
                 w = np.add(w, np.multiply(x[i], n * (d[i] - v)))
             epoch = epoch + 1
             eqm_curr = MathUtils.eqm(w, x, d)
-            print('epoch = {} w = {} eqm = {}'.format(epoch, w, eqm_curr - eqm_prev))
+            print('epoch = {}\tw = {}\teqm = {}'.format(epoch, w, eqm_curr - eqm_prev))
             if abs(eqm_curr - eqm_prev) < e:
                 break
         return w
@@ -36,18 +36,20 @@ class SingleLayerPerceptronDelta:
 if  __name__ == '__main__':
     
     # data
-    x = SampleData.add_bias(SampleData.OR.input, -1)
+    x = MathUtils.add_bias(SampleData.OR.input, -1)
     d = SampleData.OR.output
     
     # neural network
     nn = SingleLayerPerceptronDelta()
     
     # train
-    w = nn.train(x, d, 1e-3, 1e-9)
+    n = 1e-1 # learning rate
+    e = 1e-3 # error threshold
+    w = nn.train(x, d, n, e)
     
     # test
     correct = 0
-    for i in range(0,len(x)):
+    for i in range(0, len(x)):
         y = nn.test(w, x[i])
         if (y == d[i]):
             correct = correct + 1

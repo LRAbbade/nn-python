@@ -4,8 +4,8 @@ Created on 5 de dez de 2017
 @author: marcelovca90
 '''
 import numpy as np
-import SampleData
 import MathUtils
+import SampleData
 
 class SingleLayerPerceptronHebbian:
 
@@ -13,8 +13,8 @@ class SingleLayerPerceptronHebbian:
         print('SingleLayerPerceptronHebbian')
 
     def train(self, x, d, n):
-        k = len(x[0])
-        w = np.random.rand(k)
+        k = len(x)
+        w = np.random.rand(k-1)
         epoch = 0
         error = True
         while error:
@@ -26,7 +26,7 @@ class SingleLayerPerceptronHebbian:
                     w = np.add(w, np.multiply(x[i], n * (d[i] - y)))
                     error = True
             epoch = epoch + 1
-            print('epoch = {} w = {}'.format(epoch, w))
+            print('epoch = {}\tw = {}\terror={}'.format(epoch, w, error))
         return w
             
     def test(self, w, x):
@@ -34,21 +34,23 @@ class SingleLayerPerceptronHebbian:
         y = MathUtils.step(v)
         return y;
 
+
 if  __name__ == '__main__':
     
     # data
-    x = SampleData.add_bias(SampleData.OR.input, -1)
+    x = MathUtils.add_bias(SampleData.OR.input, -1)
     d = SampleData.OR.output
     
     # neural network
     nn = SingleLayerPerceptronHebbian()
     
     # train
-    w = nn.train(x, d, 1e-3)
+    n = 1e-1  # learning rate
+    w = nn.train(x, d, n)
     
     # test
     correct = 0
-    for i in range(0,len(x)):
+    for i in range(0, len(x)):
         y = nn.test(w, x[i])
         if (y == d[i]):
             correct = correct + 1

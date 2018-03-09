@@ -5,6 +5,11 @@ Created on 5 de dez de 2017
 '''
 import numpy as np
 
+class MathUtils:
+    
+    def __init__(self):
+        pass
+    
 def step(x):
     return -1 if x < 0 else +1
 
@@ -15,3 +20,8 @@ def eqm(w, x, d):
         eqm = eqm + pow(d[i] - v, 2)
     eqm = eqm / len(x)
     return eqm
+
+def add_bias(v, bias):
+    for i in range(0, len(v)):
+        v[i] = [bias] + v[i]
+    return v

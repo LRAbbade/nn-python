@@ -3,6 +3,12 @@ Created on 5 de dez de 2017
 
 @author: marcelovca90
 '''
+
+class SampleData:
+    
+    def __init__(self):
+        pass
+    
 class AND:
     input = [ [ -1, -1 ], [ -1, +1 ], [ +1, -1 ], [ +1, +1 ] ];
     output = [ -1, -1, -1, +1 ];
@@ -14,8 +20,3 @@ class OR:
 class XOR:
     input = [ [ -1, -1 ], [ -1, +1 ], [ +1, -1 ], [ +1, +1 ] ];
     output = [ -1, +1, +1, -1 ];
-    
-def add_bias(v, bias):
-    for i in range(0, len(v)):
-        v[i] = [bias] + v[i]
-    return v
