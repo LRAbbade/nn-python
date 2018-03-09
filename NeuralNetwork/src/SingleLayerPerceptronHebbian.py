@@ -17,7 +17,7 @@ class SingleLayerPerceptronHebbian:
         plot_data_x = []
         plot_data_y = []
         k = len(x)
-        w = np.random.rand(k-1)
+        w = np.random.rand(len(x[0]))
         epoch = 0
         error = True
         while error:
@@ -42,7 +42,7 @@ class SingleLayerPerceptronHebbian:
 
 
 if  __name__ == '__main__':
-    
+        
     # data
     x = MathUtils.add_bias(SampleData.OR.input, -1)
     d = SampleData.OR.output

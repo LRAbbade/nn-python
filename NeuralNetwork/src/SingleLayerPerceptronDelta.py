@@ -17,7 +17,7 @@ class SingleLayerPerceptronDelta:
         plot_data_x = []
         plot_data_y = []
         k = len(x)
-        w = np.random.rand(k-1)
+        w = np.random.rand(len(x[0]))
         epoch = 0
         while True:
             eqm_prev = MathUtils.eqm(w, x, d)
@@ -30,7 +30,7 @@ class SingleLayerPerceptronDelta:
             print('epoch = {}\tw = {}\teqm = {}'.format(epoch, w, eqm_delta))
             plot_data_x.append(epoch)
             plot_data_y.append(eqm_delta)
-            if abs(eqm_curr - eqm_prev) < e:
+            if eqm_delta < e:
                 break
         PlotUtils.plot(plot_data_x, 'epoch', plot_data_y, 'eqm')
         return w
