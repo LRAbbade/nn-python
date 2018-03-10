@@ -41,6 +41,6 @@ def shuffle(x, d):
     return x,d
 
 def split(arr):
-    first_half = arr[0:len(arr)/2]
-    second_half = arr[len(arr)/2:len(arr)]
+    first_half = arr[0:int(len(arr)/2)]
+    second_half = arr[int(len(arr)/2):int(len(arr))]
     return first_half,second_half

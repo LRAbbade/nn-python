@@ -27,12 +27,12 @@ class SingleLayerPerceptronDelta:
             epoch = epoch + 1
             eqm_curr = MathUtils.eqm(w, x, d)
             eqm_delta = abs(eqm_curr - eqm_prev)
-            print('epoch = {}\tw = {}\teqm = {}'.format(epoch, w, eqm_delta))
+            print('epoch = {}\tw = {}\teqm(abs) = {}'.format(epoch, w, eqm_delta))
             plot_data_x.append(epoch)
             plot_data_y.append(eqm_delta)
             if eqm_delta < e:
                 break
-        PlotUtils.plot(plot_data_x, 'epoch', plot_data_y, 'eqm')
+        PlotUtils.plot(plot_data_x, 'epoch', plot_data_y, 'eqm(abs)')
         return w
             
     def test(self, w, x):
