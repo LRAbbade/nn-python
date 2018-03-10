@@ -5,8 +5,8 @@ Created on 5 de dez de 2017
 '''
 import numpy as np
 import MathUtils
-import SampleData
 import PlotUtils
+import SampleData
 
 class SingleLayerPerceptronHebbian:
 
@@ -43,21 +43,27 @@ class SingleLayerPerceptronHebbian:
 
 if  __name__ == '__main__':
         
-    # data
+    # read data
     x = MathUtils.add_bias(SampleData.TIC_TAC_TOE_ENDGAME.input, -1)
     d = SampleData.TIC_TAC_TOE_ENDGAME.output
+    
+    # prepare data
+    x,d = MathUtils.shuffle(x,d)
+    x_train,x_test = MathUtils.split(x)
+    d_train,d_test = MathUtils.split(d)
     
     # neural network
     nn = SingleLayerPerceptronHebbian()
     
     # train
     n = 1e-1  # learning rate
-    w = nn.train(x, d, n)
+    w = nn.train(x_train, d_train, n)
     
     # test
     correct = 0
-    for i in range(0, len(x)):
-        y = nn.test(w, x[i])
-        if (y == d[i]):
+    for i in range(0, len(x_test)):
+        y = nn.test(w, x_test[i])
+        if (y == d_test[i]):
             correct = correct + 1
-    print('accuracy: {}/{} ({}%)'.format(correct, len(x), 100.0 * float(correct) / float(len(x))))
+    accuracy = 100.0 * float(correct) / float(len(x_test))
+    print('accuracy: {}/{} ({:.2f}%)'.format(correct, len(x_test), accuracy))

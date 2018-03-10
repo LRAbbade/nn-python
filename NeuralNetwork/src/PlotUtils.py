@@ -31,6 +31,6 @@ def plot(x, _xlabel, y, _ylabel):
     ax.set_ylabel(_ylabel)
     ax.set_title('{} vs {}'.format(_xlabel, _ylabel))
     
-    # display    
+    # display
     ax.grid()
     plt.show()
