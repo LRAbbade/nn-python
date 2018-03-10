@@ -43,8 +43,8 @@ class SingleLayerPerceptronDelta:
 if  __name__ == '__main__':
     
     # data
-    x = MathUtils.add_bias(SampleData.OR.input, -1)
-    d = SampleData.OR.output
+    x = MathUtils.add_bias(SampleData.TIC_TAC_TOE_ENDGAME.input, -1)
+    d = SampleData.TIC_TAC_TOE_ENDGAME.output
     
     # neural network
     nn = SingleLayerPerceptronDelta()
