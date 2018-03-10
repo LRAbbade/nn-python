@@ -37,6 +37,7 @@ def shuffle(x, d):
         td = d[i]
         d[i] = d[j]
         d[j] = td
+        i = i + 1
     return x,d
 
 def split(arr):
