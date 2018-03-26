@@ -1,7 +1,7 @@
 # nn-python
 Simple Python implementation of some Neural Networks
 
-![readme](https://raw.githubusercontent.com/marcelovca90/nn-python/master/README.png "Readme")
+![Multilayer Perceptron results on Ionosphere data set](README.png)
 
 Currently the following flavors are available:
 - Simple Layer Perceptron (with Hebbian learning)
