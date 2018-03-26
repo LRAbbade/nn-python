@@ -12,64 +12,113 @@ from data import SampleData
 class MultilayerPerceptron:
 
     def __init__(self):
+        
         self.n = 1e-3 # learning rate
-        self.e = 1e-3 # error threshold
-        self.l = 4 # neurons in the hidden layer
+        self.e = 1e-6 # error threshold
         self.g = MathUtils.tanh # activation function
         self.g_d = MathUtils.tanh_d # activation function derivative
         self.plot_data_x = [] # epochs for plotting
         self.plot_data_y = [] # eqms for plotting
 
-    def train(self, x, d):
+    def eqm(self, w, x, d):
+        
         k = len(x)
-        w = np.random.rand(3, len(x[0]))
-        epoch = 0
-        while True:
-            eqm_prev = MathUtils.eqm(w, x, d)
-            for i in range(0, k):
+        ans = 0
+        
+        for j in range(0, k):
+            i,y = self.feed_forward(w, x[j])
+            ans = ans + (d[j] - y[2])**2
+            ans = ans / 2
+        ans = ans / k
+        
+        return ans
 
+    def feed_forward(self, w, x_i):
+        
+        i = [None] * 3
+        y = [None] * 3
+        
+        i[0] = np.dot(np.transpose(w[0]), x_i)
+        y[0] = self.g(i[0])
+        
+        i[1] = np.dot(np.transpose(w[1]), y[0])
+        y[1] = self.g(i[1])
+        
+        i[2] = np.dot(np.transpose(w[2]), y[1])
+        y[2] = self.g(i[2])
+        
+        return i , y
+
+    def back_propagate(self, x_i, d_i, i, y, w):
+        
+        delta = [None] * 3
+        
+        delta[2] = np.subtract(d_i, y[2]) * self.g_d(i[2])
+        w[2] = w[2] + np.multiply(np.multiply(self.n, delta[2]), y[1])
+        
+        delta[1] = np.dot(delta[2], w[2]) * self.g_d(i[1])
+        w[1] = w[1] + np.multiply(np.multiply(self.n, delta[1]), y[0])
+        
+        delta[0] = np.dot(delta[1], w[1]) * self.g_d(i[0])
+        w[0] = w[0] + np.multiply(np.multiply(self.n, delta[0]), x_i)
+        
+        return w
+
+    def train(self, x, d):
+        
+        # number of samples
+        k = len(x)
+        
+        # randomly initialize synaptic weights
+        w = np.random.rand(3, len(x[0]))
+        
+        # initialize epoch counter
+        epoch = 0
+        
+        # train until eqm < e
+        while True:
+
+            # eqm before weight adjust 
+            eqm_prev = self.eqm(w, x, d)
+            
+            # present all samples
+            for j in range(0, k):
                 # forward step
-                
-                i_1 = np.dot(np.transpose(w[0]), x[i])
-                y_1 = self.g(i_1)
-                
-                i_2 = np.dot(np.transpose(w[1]), y_1)
-                y_2 = self.g(i_2)
-                
-                i_3 = np.dot(np.transpose(w[2]), y_2)
-                y_3 = self.g(i_3)
-                
+                i,y = self.feed_forward(w, x[j])
                 # backward step
-                
-                delta_3 = np.subtract(d[i], y_3) * self.g_d(i_3)
-                w[2] = w[2] + np.multiply(np.multiply(self.n, delta_3), y_2)
-                
-                delta_2 = np.dot(delta_3, w[2]) * self.g_d(i_2)
-                w[1] = w[1] + np.multiply(np.multiply(self.n, delta_2), y_1)
-                
-                delta_1 = np.dot(delta_2, w[1]) * self.g_d(i_1)
-                w[0] = w[0] + np.multiply(np.multiply(self.n, delta_1), x[i])
-                            
-            eqm_curr = MathUtils.eqm(w, x, d)
-            eqm_delta = sum(abs(np.subtract(eqm_curr,eqm_prev)))
+                w = self.back_propagate(x[j], d[j], i, y, w)
+            
+            # eqm after weight adjust                
+            eqm_curr = self.eqm(w, x, d)
+
+            # eqm absolute delta
+            eqm_delta = abs(eqm_curr - eqm_prev)
+            
+            # increment epoch counter
             epoch = epoch + 1
-            print('epoch = {}\tw = {}\teqm(abs) = {}'.format(epoch, w, eqm_delta))
+            
+            # print debug line and add plot data
+            print('epoch = {}\teqm(abs) = {}'.format(epoch, eqm_delta))
             self.plot_data_x.append(epoch)
             self.plot_data_y.append(eqm_delta)
-            if np.all(eqm_delta < self.e):
-                break
-        return w
             
+            # stop condition
+            if eqm_delta < self.e:
+                break
+            
+        return w
+    
     def test(self, w, x):
-        v = np.dot(np.transpose(w), x)
-        y = self.g(v)
+        
+        i,y = self.feed_forward(w, x)
+        
         return y;
 
 if  __name__ == '__main__':
     
     # load data
-    x = SampleData.XOR_GATE.input
-    d = SampleData.XOR_GATE.output
+    x = SampleData.TIC_TAC_TOE_ENDGAME.input
+    d = SampleData.TIC_TAC_TOE_ENDGAME.output
     
     # prepare data
     x = DataUtils.add_bias(x)
