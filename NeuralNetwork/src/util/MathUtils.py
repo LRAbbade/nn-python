@@ -15,7 +15,7 @@ def step(u):
     return 1 if u >= 0 else 0
 
 def sign(u):
-    return 1 if u >= 0 else -1
+    return np.sign(u)
 
 def ramp(u, a = 1):
     if (-a <= u and u <= a):
@@ -27,6 +27,9 @@ def logistic(u, beta = 1):
 
 def tanh(u):
     return np.tanh(u)
+
+def tanh_d(u):
+    return 1 - tanh(u)**2
 
 def gauss(u, c = 1, sd = 0.5):
     return np.exp(-((u - c)**2) / (2 * sd**2))
