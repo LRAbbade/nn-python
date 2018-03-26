@@ -14,11 +14,11 @@ class SingleLayerPerceptronDelta:
     def __init__(self):
         self.n = 1e-3 # learning rate
         self.e = 1e-3 # error threshold
-        self.f = MathUtils.step # activation function
+        self.f = MathUtils.sign # activation function
+        self.plot_data_x = [] # epochs for plotting
+        self.plot_data_y = [] # eqms for plotting
 
     def train(self, x, d):
-        plot_data_x = []
-        plot_data_y = []
         k = len(x)
         w = np.random.rand(len(x[0]))
         epoch = 0
@@ -31,11 +31,10 @@ class SingleLayerPerceptronDelta:
             eqm_curr = MathUtils.eqm(w, x, d)
             eqm_delta = abs(eqm_curr - eqm_prev)
             print('epoch = {}\tw = {}\teqm(abs) = {}'.format(epoch, w, eqm_delta))
-            plot_data_x.append(epoch)
-            plot_data_y.append(eqm_delta)
+            self.plot_data_x.append(epoch)
+            self.plot_data_y.append(eqm_delta)
             if eqm_delta < self.e:
                 break
-        PlotUtils.plot(plot_data_x, 'epoch', plot_data_y, 'eqm(abs)')
         return w
             
     def test(self, w, x):
@@ -50,16 +49,19 @@ if  __name__ == '__main__':
     d = SampleData.TIC_TAC_TOE_ENDGAME.output
     
     # prepare data
-    x = DataUtils.add_bias(x,-1)
+    x = DataUtils.add_bias(x)
     x,d = DataUtils.shuffle(x,d)
     x_train,x_test = DataUtils.split(x)
     d_train,d_test = DataUtils.split(d)
     
-    # create neural network
+    # create the neural network
     nn = SingleLayerPerceptronDelta()
     
     # train the neural network
     w = nn.train(x_train, d_train)
+    
+    # plot epoch versus eqm data
+    PlotUtils.plot(nn.plot_data_x, 'epoch', nn.plot_data_y, 'eqm(abs)')
     
     # test the neural network
     correct = 0
