@@ -4,6 +4,7 @@ Created on 5 de dez de 2017
 @author: marcelovca90
 '''
 import numpy as np
+from util import DataUtils
 from util import MathUtils
 from util import PlotUtils
 from data import SampleData
@@ -12,6 +13,7 @@ class SingleLayerPerceptronHebbian:
 
     def __init__(self):
         self.n = 1e-3 # learning rate
+        self.f = MathUtils.step # activation function
 
     def train(self, x, d):
         plot_data_x = []
@@ -24,7 +26,7 @@ class SingleLayerPerceptronHebbian:
             error = False
             for i in range(0, k):
                 v = np.dot(np.transpose(w), x[i])
-                y = MathUtils.step(v)
+                y = self.f(v)
                 if y != d[i]:
                     w = np.add(w, np.multiply(x[i], self.n * (d[i] - y)))
                     error = True
@@ -37,7 +39,7 @@ class SingleLayerPerceptronHebbian:
             
     def test(self, w, x):
         v = np.dot(np.transpose(w), x)
-        y = MathUtils.step(v)
+        y = self.f(v)
         return y;
 
 if  __name__ == '__main__':
@@ -47,10 +49,10 @@ if  __name__ == '__main__':
     d = SampleData.TIC_TAC_TOE_ENDGAME.output
     
     # prepare data
-    x = MathUtils.add_bias(x,-1)
-    x,d = MathUtils.shuffle(x,d)
-    x_train,x_test = MathUtils.split(x)
-    d_train,d_test = MathUtils.split(d)
+    x = DataUtils.add_bias(x,-1)
+    x,d = DataUtils.shuffle(x,d)
+    x_train,x_test = DataUtils.split(x)
+    d_train,d_test = DataUtils.split(d)
     
     # create neural network
     nn = SingleLayerPerceptronHebbian()
