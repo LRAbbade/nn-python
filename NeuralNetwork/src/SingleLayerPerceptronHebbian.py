@@ -13,7 +13,7 @@ class SingleLayerPerceptronHebbian:
 
     def __init__(self):
         self.n = 1e-3 # learning rate
-        self.f = MathUtils.sign # activation function
+        self.g = MathUtils.sign # activation function
         self.plot_data_x = [] # epochs for plotting
         self.plot_data_y = [] # eqms for plotting
 
@@ -27,7 +27,7 @@ class SingleLayerPerceptronHebbian:
             error = False
             for i in range(0, k):
                 v = np.dot(np.transpose(w), x[i])
-                y = self.f(v)
+                y = self.g(v)
                 if y != d[i]:
                     w = np.add(w, np.multiply(x[i], self.n * (d[i] - y)))
                     error = True
@@ -39,7 +39,7 @@ class SingleLayerPerceptronHebbian:
             
     def test(self, w, x):
         v = np.dot(np.transpose(w), x)
-        y = self.f(v)
+        y = self.g(v)
         return y;
 
 if  __name__ == '__main__':

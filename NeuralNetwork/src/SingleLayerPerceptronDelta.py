@@ -14,7 +14,7 @@ class SingleLayerPerceptronDelta:
     def __init__(self):
         self.n = 1e-3 # learning rate
         self.e = 1e-3 # error threshold
-        self.f = MathUtils.sign # activation function
+        self.g = MathUtils.sign # activation function
         self.plot_data_x = [] # epochs for plotting
         self.plot_data_y = [] # eqms for plotting
 
@@ -39,7 +39,7 @@ class SingleLayerPerceptronDelta:
             
     def test(self, w, x):
         v = np.dot(np.transpose(w), x)
-        y = self.f(v)
+        y = self.g(v)
         return y;
 
 if  __name__ == '__main__':
@@ -61,7 +61,7 @@ if  __name__ == '__main__':
     w = nn.train(x_train, d_train)
     
     # plot epoch versus eqm data
-    PlotUtils.plot(nn.plot_data_x, 'epoch', nn.plot_data_y, 'eqm(abs)')
+    PlotUtils.plot(nn.plot_data_x, 'epoch', nn.plot_data_y, 'eqm(abs)', nn.e)
     
     # test the neural network
     correct = 0
