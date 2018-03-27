@@ -10,16 +10,11 @@ from numpy.random import sample
 
 class SampleData:
     
-    prefix = os.path.dirname(__file__)
-    
-    def __init__(self):
-        pass
-    
     @staticmethod
-    def read(folder, filename, flatten=False):
-        absfilename = os.path.join(SampleData.prefix,folder,filename)
+    def read(folder, filename, flatten = False):
+        filename_abs = os.path.join(os.path.dirname(__file__), folder, filename)
         data = []
-        with open(absfilename) as file:
+        with open(filename_abs) as file:
             for line in file:
                 data_string = line.strip().split(',')
                 data_float = map(float, data_string)
