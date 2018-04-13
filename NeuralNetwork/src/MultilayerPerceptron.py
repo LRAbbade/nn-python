@@ -119,6 +119,9 @@ if  __name__ == '__main__':
     # set random number generator seed
     np.random.seed(DataUtils.random_seed())
     
+    # set floating point formatting when printing
+    np.set_printoptions(formatter={'float': '{: 0.6f}'.format})
+
     # load data
     x = SampleData.IONOSPHERE.input
     d = SampleData.IONOSPHERE.output

@@ -15,7 +15,7 @@ class SingleLayerPerceptronHebbian:
         self.n = 1e-3 # learning rate
         self.g = MathUtils.sign # activation function
         self.plot_data_x = [] # epochs for plotting
-        self.plot_data_y = [] # eqms for plotting
+        self.plot_data_y = [] # errors for plotting
 
     def train(self, x, d):
         k = len(x)
@@ -45,6 +45,9 @@ if  __name__ == '__main__':
     
     # set random number generator seed
     np.random.seed(DataUtils.random_seed())
+    
+    # set floating point formatting when printing
+    np.set_printoptions(formatter={'float': '{: 0.6f}'.format})
         
     # load data
     x = SampleData.TIC_TAC_TOE_ENDGAME.input
