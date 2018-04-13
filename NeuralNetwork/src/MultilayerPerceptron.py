@@ -116,6 +116,9 @@ class MultilayerPerceptron:
 
 if  __name__ == '__main__':
     
+    # set random number generator seed
+    np.random.seed(DataUtils.random_seed())
+    
     # load data
     x = SampleData.IONOSPHERE.input
     d = SampleData.IONOSPHERE.output

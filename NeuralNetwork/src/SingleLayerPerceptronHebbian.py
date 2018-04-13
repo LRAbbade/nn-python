@@ -18,7 +18,6 @@ class SingleLayerPerceptronHebbian:
         self.plot_data_y = [] # eqms for plotting
 
     def train(self, x, d):
-
         k = len(x)
         w = np.random.rand(len(x[0]))
         epoch = 0
@@ -43,6 +42,9 @@ class SingleLayerPerceptronHebbian:
         return y;
 
 if  __name__ == '__main__':
+    
+    # set random number generator seed
+    np.random.seed(DataUtils.random_seed())
         
     # load data
     x = SampleData.TIC_TAC_TOE_ENDGAME.input

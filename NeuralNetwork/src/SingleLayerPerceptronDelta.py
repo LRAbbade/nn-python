@@ -44,6 +44,9 @@ class SingleLayerPerceptronDelta:
 
 if  __name__ == '__main__':
     
+    # set random number generator seed
+    np.random.seed(DataUtils.random_seed())
+    
     # load data
     x = SampleData.TIC_TAC_TOE_ENDGAME.input
     d = SampleData.TIC_TAC_TOE_ENDGAME.output
