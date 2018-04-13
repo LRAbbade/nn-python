@@ -4,6 +4,7 @@ Created on 9 de mar de 2018
 @author: marcelocysneiros
 '''
 import matplotlib.pyplot as plt
+import datetime as dt
 import numpy as np
 
 class PlotUtils:
@@ -31,4 +32,6 @@ def plot(x, _xlabel, y, _ylabel, e=None):
     
     # display
     ax.grid()
+    date_string = dt.datetime.now().strftime("%Y-%m-%d_%Hh%Mm%Ss")
+    plt.savefig('{}.png'.format(date_string))
     plt.show()
