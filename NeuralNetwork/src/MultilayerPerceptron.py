@@ -13,8 +13,8 @@ class MultilayerPerceptron:
 
     def __init__(self):
         
-        self.n = 1e-3 # learning rate
-        self.e = 1e-6 # error threshold
+        self.n = 1e-1 # learning rate
+        self.e = 1e-8 # error threshold
         self.g = MathUtils.tanh # activation function
         self.g_d = MathUtils.tanh_d # activation function derivative
         self.plot_data_x = [] # epochs for plotting
@@ -101,7 +101,7 @@ class MultilayerPerceptron:
             print('epoch = {}\teqm_delta = {}'.format(epoch, eqm_delta))
             
             self.plot_data_x.append(epoch)
-            self.plot_data_y.append(eqm_curr)
+            self.plot_data_y.append(eqm_delta)
             
             # stop condition
             if eqm_delta < self.e:
@@ -124,8 +124,8 @@ if  __name__ == '__main__':
     np.set_printoptions(formatter={'float': '{: 0.6f}'.format})
 
     # load data
-    x = SampleData.IONOSPHERE.input
-    d = SampleData.IONOSPHERE.output
+    x = SampleData.BLOOD_TRANSFUSION.input
+    d = SampleData.BLOOD_TRANSFUSION.output
     
     # prepare data
     x = DataUtils.add_bias(x)

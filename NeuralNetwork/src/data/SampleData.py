@@ -45,3 +45,9 @@ class IONOSPHERE:
 class TIC_TAC_TOE_ENDGAME:
     input = SampleData.read('tic-tac-toe-endgame', 'input.txt')
     output = SampleData.read('tic-tac-toe-endgame', 'output.txt', True)
+    
+# http://archive.ics.uci.edu/ml/datasets/Blood+Transfusion+Service+Center
+class BLOOD_TRANSFUSION:
+    input = SampleData.read('blood-transfusion', 'input.txt')
+    output = SampleData.read('blood-transfusion', 'output.txt', True)
+
