@@ -51,3 +51,7 @@ class BLOOD_TRANSFUSION:
     input = SampleData.read('blood-transfusion', 'input.txt')
     output = SampleData.read('blood-transfusion', 'output.txt', True)
 
+# 
+class DIABETES:
+    input = SampleData.read('diabetes', 'input.txt')
+    output = SampleData.read('diabetes', 'output.txt', True)
