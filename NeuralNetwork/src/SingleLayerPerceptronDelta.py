@@ -30,9 +30,9 @@ class SingleLayerPerceptronDelta:
             epoch = epoch + 1
             eqm_curr = MathUtils.eqm(w, x, d)
             eqm_delta = abs(eqm_curr - eqm_prev)
-            print('epoch = {}\tw = {}\teqm(abs) = {}'.format(epoch, w, eqm_delta))
+            print('epoch = {}\teqm = {}'.format(epoch, eqm_delta))
             self.plot_data_x.append(epoch)
-            self.plot_data_y.append(eqm_delta)
+            self.plot_data_y.append(eqm_curr)
             if eqm_delta < self.e:
                 break
         return w
@@ -57,8 +57,8 @@ if  __name__ == '__main__':
     # prepare data
     x = DataUtils.add_bias(x)
     x,d = DataUtils.shuffle(x,d)
-    x_train,x_test = DataUtils.split(x)
-    d_train,d_test = DataUtils.split(d)
+    x_train,x_test = DataUtils.splitTrainTest(x)
+    d_train,d_test = DataUtils.splitTrainTest(d)
     
     # create the neural network
     nn = SingleLayerPerceptronDelta()
@@ -67,7 +67,7 @@ if  __name__ == '__main__':
     w = nn.train(x_train, d_train)
     
     # plot epoch versus eqm data
-    PlotUtils.plot(nn.plot_data_x, 'epoch', nn.plot_data_y, 'eqm(abs)', nn.e)
+    PlotUtils.plot(nn.plot_data_x, 'epoch', nn.plot_data_y, 'eqm')
     
     # test the neural network
     correct = 0

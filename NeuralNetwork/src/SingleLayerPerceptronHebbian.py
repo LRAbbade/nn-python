@@ -31,7 +31,7 @@ class SingleLayerPerceptronHebbian:
                     w = np.add(w, np.multiply(x[i], self.n * (d[i] - y)))
                     error = True
             epoch = epoch + 1
-            print('epoch = {}\tw = {}\terror={}'.format(epoch, w, error))
+            print('epoch = {}\terror={}'.format(epoch, error))
             self.plot_data_x.append(epoch)
             self.plot_data_y.append(error)
         return w
@@ -50,14 +50,14 @@ if  __name__ == '__main__':
     np.set_printoptions(formatter={'float': '{: 0.6f}'.format})
         
     # load data
-    x = SampleData.TIC_TAC_TOE_ENDGAME.input
-    d = SampleData.TIC_TAC_TOE_ENDGAME.output
+    x = SampleData.LOGIC_GATE_OR.input
+    d = SampleData.LOGIC_GATE_OR.output
     
     # prepare data
     x = DataUtils.add_bias(x)
     x,d = DataUtils.shuffle(x,d)
-    x_train,x_test = DataUtils.split(x)
-    d_train,d_test = DataUtils.split(d)
+    x_train,x_test = DataUtils.splitTrainTest(x)
+    d_train,d_test = DataUtils.splitTrainTest(d)
     
     # create the neural network
     nn = SingleLayerPerceptronHebbian()
@@ -66,7 +66,7 @@ if  __name__ == '__main__':
     w = nn.train(x_train, d_train)
     
     # plot epoch versus error data
-    PlotUtils.plot(nn.plot_data_x, 'epoch', nn.plot_data_y, 'error')
+    PlotUtils.plot(nn.plot_data_x, 'epoch', nn.plot_data_y, 'eqm')
     
     # test the neural network
     correct = 0

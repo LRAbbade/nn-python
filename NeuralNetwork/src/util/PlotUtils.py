@@ -22,8 +22,8 @@ def plot(x, _xlabel, y, _ylabel, e=None):
     ax.plot(x, y, color='blue', linewidth=1.5)
     
     # limits
-    ax.set_xlim([1, len(x) if len(x) > 1 else 2])
-    ax.set_ylim([0, max(y) if max(y) > 0 else 1e-2])
+    ax.set_xlim([np.min(x), np.max(x)])
+    ax.set_ylim([np.min(y), np.max(y)])
     
     # text
     ax.set_xlabel(_xlabel)

@@ -14,7 +14,7 @@ class MultilayerPerceptron:
     def __init__(self):
         
         self.n = 1e-3 # learning rate
-        self.e = 1e-9 # error threshold
+        self.e = 1e-6 # error threshold
         self.g = MathUtils.tanh # activation function
         self.g_d = MathUtils.tanh_d # activation function derivative
         self.plot_data_x = [] # epochs for plotting
@@ -64,13 +64,13 @@ class MultilayerPerceptron:
         
         return w
 
-    def train(self, x, d):
+    def train(self, x, d, xv, dv):
         
         # number of samples
         k = len(x)
         
         # randomly initialize synaptic weights
-        w = np.random.rand(3, len(x[0]))
+        w = np.random.uniform(-1.0, +1.0, (3, len(x[0])))
         
         # initialize epoch counter
         epoch = 0
@@ -79,7 +79,7 @@ class MultilayerPerceptron:
         while True:
 
             # eqm before weight adjust 
-            eqm_prev = self.eqm(w, x, d)
+            eqm_prev = self.eqm(w, xv, dv)
             
             # present all samples
             for j in range(0, k):
@@ -89,7 +89,7 @@ class MultilayerPerceptron:
                 w = self.back_propagate(x[j], d[j], i, y, w)
             
             # eqm after weight adjust                
-            eqm_curr = self.eqm(w, x, d)
+            eqm_curr = self.eqm(w, xv, dv)
 
             # eqm absolute delta
             eqm_delta = abs(eqm_curr - eqm_prev)
@@ -98,9 +98,10 @@ class MultilayerPerceptron:
             epoch = epoch + 1
             
             # print debug line and add plot data
-            print('epoch = {}\teqm(abs) = {}'.format(epoch, eqm_delta))
+            print('epoch = {}\teqm_delta = {}'.format(epoch, eqm_delta))
+            
             self.plot_data_x.append(epoch)
-            self.plot_data_y.append(eqm_delta)
+            self.plot_data_y.append(eqm_curr)
             
             # stop condition
             if eqm_delta < self.e:
@@ -129,17 +130,17 @@ if  __name__ == '__main__':
     # prepare data
     x = DataUtils.add_bias(x)
     x,d = DataUtils.shuffle(x,d)
-    x_train,x_test = DataUtils.split(x)
-    d_train,d_test = DataUtils.split(d)
+    x_train,x_validate,x_test = DataUtils.splitTrainValidateTest(x)
+    d_train,d_validate,d_test = DataUtils.splitTrainValidateTest(d)
     
     # create the neural network
     nn = MultilayerPerceptron()
     
     # train the neural network
-    w = nn.train(x_train, d_train)
+    w = nn.train(x_train, d_train, x_validate, d_validate)
     
     # plot epoch versus eqm data
-    PlotUtils.plot(nn.plot_data_x, 'epoch', nn.plot_data_y, 'eqm(abs)', nn.e)
+    PlotUtils.plot(nn.plot_data_x, 'epoch', nn.plot_data_y, 'eqm')
     
     # test the neural network
     correct = 0

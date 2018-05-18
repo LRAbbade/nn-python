@@ -29,10 +29,16 @@ def shuffle(x, d):
         i = i + 1
     return x,d
 
-def split(arr, split_point = 0.5):
-    first_half = arr[0:int(len(arr)*split_point)]
-    second_half = arr[int(len(arr)*split_point):int(len(arr))]
-    return first_half,second_half
+def splitTrainTest(arr, training_percentage = 0.5):
+    training = arr[0:int(len(arr)*training_percentage)]
+    test = arr[int(len(arr)*training_percentage):int(len(arr))]
+    return training,test
+
+def splitTrainValidateTest(arr, training_percent = 0.4, validation_percent = 0.2):
+    training = arr[0:int(len(arr)*training_percent)]
+    validation = arr[int(len(arr)*training_percent):int(len(arr)*(training_percent+validation_percent))]
+    test = arr[int(len(arr)*(training_percent+validation_percent)):int(len(arr))]
+    return training,validation,test
 
 def random_seed():
-    return 0;
+    return np.random.randint(2<<32);
