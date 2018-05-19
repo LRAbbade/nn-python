@@ -70,7 +70,7 @@ class MultilayerPerceptron:
         
         return w
 
-    def train(self, x, d, xv, dv):
+    def train(self, x, d):
         
         # number of samples
         k = len(x)
@@ -85,7 +85,7 @@ class MultilayerPerceptron:
         while True:
 
             # eqm before weight adjust 
-            eqm_prev = self.eqm(w, xv, dv)
+            eqm_prev = self.eqm(w, x, d)
             
             # present all samples
             for j in range(0, k):
@@ -95,7 +95,7 @@ class MultilayerPerceptron:
                 w = self.back_propagate(x[j], d[j], i, y, w)
             
             # eqm after weight adjust                
-            eqm_curr = self.eqm(w, xv, dv)
+            eqm_curr = self.eqm(w, x, d)
 
             # eqm absolute delta
             eqm_delta = abs(eqm_curr - eqm_prev)
@@ -137,14 +137,14 @@ if  __name__ == '__main__':
     # prepare data
     x = DataUtils.add_bias(x)
     x,d = DataUtils.shuffle(x,d)
-    x_train,x_validate,x_test = DataUtils.splitTrainValidateTest(x)
-    d_train,d_validate,d_test = DataUtils.splitTrainValidateTest(d)
+    x_train,x_test = DataUtils.splitTrainTest(x)
+    d_train,d_test = DataUtils.splitTrainTest(d)
     
     # create the neural network
     nn = MultilayerPerceptron()
     
     # train the neural network
-    w = nn.train(x_train, d_train, x_validate, d_validate)
+    w = nn.train(x_train, d_train)
     
     # plot epoch versus eqm data
     PlotUtils.plot(nn.plot_data_x, 'epoch', nn.plot_data_y, 'eqm')
