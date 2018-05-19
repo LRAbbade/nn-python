@@ -38,12 +38,15 @@ class MultilayerPerceptron:
         i = [None] * 3
         y = [None] * 3
         
+        # feed from input layer to first hidden layer
         i[0] = np.dot(np.transpose(w[0]), x_i)
         y[0] = self.g(i[0])
         
+        # feed from first hidden layer to last hidden layer
         i[1] = np.dot(np.transpose(w[1]), y[0])
         y[1] = self.g(i[1])
         
+        # feed from last hidden layer to output layer
         i[2] = np.dot(np.transpose(w[2]), y[1])
         y[2] = self.g(i[2])
         
@@ -53,12 +56,15 @@ class MultilayerPerceptron:
         
         delta = [None] * 3
         
+        # propagate from output layer to last hidden layer
         delta[2] = np.subtract(d_i, y[2]) * self.g_d(i[2])
         w[2] = w[2] + np.multiply(np.multiply(self.n, delta[2]), y[1])
         
+        # propagate from last hidden layer to first hidden layer
         delta[1] = np.dot(delta[2], w[2]) * self.g_d(i[1])
         w[1] = w[1] + np.multiply(np.multiply(self.n, delta[1]), y[0])
         
+        # propagate from first hidden layer to input layer
         delta[0] = np.dot(delta[1], w[1]) * self.g_d(i[0])
         w[0] = w[0] + np.multiply(np.multiply(self.n, delta[0]), x_i)
         
@@ -98,10 +104,11 @@ class MultilayerPerceptron:
             epoch = epoch + 1
             
             # print debug line and add plot data
-            print('epoch = {}\teqm_delta = {}'.format(epoch, eqm_delta))
+            print('epoch = {}\teqm = {}'.format(epoch, eqm_delta))
             
+            # append plot data
             self.plot_data_x.append(epoch)
-            self.plot_data_y.append(eqm_delta)
+            self.plot_data_y.append(eqm_curr)
             
             # stop condition
             if eqm_delta < self.e:
