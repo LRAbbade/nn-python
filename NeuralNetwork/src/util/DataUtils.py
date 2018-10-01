@@ -6,10 +6,10 @@ Created on 26 de mar de 2018
 import numpy as np
 
 class DataUtils:
-    
+
     def __init__(self):
         pass
-    
+
 def add_bias(arr, bias = -1):
     for i in range(0, len(arr)):
         arr[i] = [bias] + arr[i]
@@ -41,4 +41,4 @@ def splitTrainValidateTest(arr, training_percent = 0.4, validation_percent = 0.2
     return training,validation,test
 
 def random_seed():
-    return np.random.randint(2<<32);
+    return np.random.randint(65536);

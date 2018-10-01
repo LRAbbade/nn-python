@@ -36,39 +36,39 @@ class SingleLayerPerceptronDelta:
             if eqm_delta < self.e:
                 break
         return w
-            
+
     def test(self, w, x):
         v = np.dot(np.transpose(w), x)
         y = self.g(v)
         return y;
 
 if  __name__ == '__main__':
-    
+
     # set random number generator seed
     np.random.seed(DataUtils.random_seed())
-    
+
     # set floating point formatting when printing
     np.set_printoptions(formatter={'float': '{: 0.6f}'.format})
-    
+
     # load data
     x = SampleData.TIC_TAC_TOE_ENDGAME.input
     d = SampleData.TIC_TAC_TOE_ENDGAME.output
-    
+
     # prepare data
     x = DataUtils.add_bias(x)
     x,d = DataUtils.shuffle(x,d)
     x_train,x_test = DataUtils.splitTrainTest(x)
     d_train,d_test = DataUtils.splitTrainTest(d)
-    
+
     # create the neural network
     nn = SingleLayerPerceptronDelta()
-    
+
     # train the neural network
     w = nn.train(x_train, d_train)
-    
-    # plot epoch versus eqm data
-    PlotUtils.plot(nn.plot_data_x, 'epoch', nn.plot_data_y, 'eqm')
-    
+
+    # plot epoch versus error data
+    PlotUtils.plot(nn.plot_data_x, 'epoch', nn.plot_data_y, 'eqm delta')
+
     # test the neural network
     correct = 0
     for i in range(0, len(x_test)):
