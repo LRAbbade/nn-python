@@ -31,7 +31,7 @@ class SingleLayerPerceptronHebbian:
                     w = np.add(w, np.multiply(x[i], self.n * (d[i] - y)))
                     error = True
             epoch = epoch + 1
-            print('epoch = {}\terror={}'.format(epoch, error))
+            print('epoch = {}\terror = {}'.format(epoch, error))
             self.plot_data_x.append(epoch)
             self.plot_data_y.append(error)
         return w

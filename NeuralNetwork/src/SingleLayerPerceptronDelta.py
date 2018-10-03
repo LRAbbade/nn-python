@@ -30,7 +30,7 @@ class SingleLayerPerceptronDelta:
             epoch = epoch + 1
             eqm_curr = MathUtils.eqm(w, x, d)
             eqm_delta = abs(eqm_curr - eqm_prev)
-            print('epoch = {}\teqm = {}'.format(epoch, eqm_delta))
+            print('epoch = {}\terror = {}\tdelta = {}'.format(epoch, eqm_curr, eqm_delta))
             self.plot_data_x.append(epoch)
             self.plot_data_y.append(eqm_curr)
             if eqm_delta < self.e:
@@ -67,7 +67,7 @@ if  __name__ == '__main__':
     w = nn.train(x_train, d_train)
 
     # plot epoch versus error data
-    PlotUtils.plot(nn.plot_data_x, 'epoch', nn.plot_data_y, 'eqm delta')
+    PlotUtils.plot(nn.plot_data_x, 'epoch', nn.plot_data_y, 'error')
 
     # test the neural network
     correct = 0

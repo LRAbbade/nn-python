@@ -104,11 +104,11 @@ class MultilayerPerceptron:
             epoch = epoch + 1
             
             # print debug line and add plot data
-            print('epoch = {}\teqm = {}'.format(epoch, eqm_delta))
+            print('epoch = {}\terror = {}\tdelta = {}'.format(epoch, eqm_curr, eqm_delta))
             
             # append plot data
             self.plot_data_x.append(epoch)
-            self.plot_data_y.append(eqm_curr)
+            self.plot_data_y.append(eqm_delta)
             
             # stop condition
             if eqm_delta < self.e:
@@ -147,7 +147,7 @@ if  __name__ == '__main__':
     w = nn.train(x_train, d_train)
     
     # plot epoch versus eqm data
-    PlotUtils.plot(nn.plot_data_x, 'epoch', nn.plot_data_y, 'eqm')
+    PlotUtils.plot(nn.plot_data_x, 'epoch', nn.plot_data_y, 'error')
     
     # test the neural network
     correct = 0
