@@ -23,10 +23,6 @@ def plot(x, _xlabel, y, _ylabel):
         ax = plt.gca()
         ax.plot(x, y, color='blue', linewidth=1.5)
         
-        # limits
-        ax.set_xlim([np.min(x), np.max(x)])
-        ax.set_ylim([np.min(y), np.max(y)])
-        
         # text
         ax.set_xlabel(_xlabel)
         ax.set_ylabel(_ylabel)
@@ -36,4 +32,5 @@ def plot(x, _xlabel, y, _ylabel):
         ax.grid()
         date_string = dt.datetime.now().strftime("%Y-%m-%d_%Hh%Mm%Ss")
         plt.savefig('{}.png'.format(date_string))
+        plt.autoscale(enable=True, axis='y')
         plt.show()
