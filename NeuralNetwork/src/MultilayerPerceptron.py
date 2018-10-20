@@ -11,10 +11,12 @@ from data import SampleData
 
 class MultilayerPerceptron:
 
-    def __init__(self):
+    def __init__(self,x,d):
         
-        self.n = 1e-1 # learning rate
-        self.e = 1e-8 # error threshold
+        self.h1 = len(x[0])
+        self.h2 = min(len(x[0]/2),1)
+        self.n = 1e-4 # learning rate
+        self.e = 1e-7 # error threshold
         self.g = MathUtils.tanh # activation function
         self.g_d = MathUtils.tanh_d # activation function derivative
         self.plot_data_x = [] # epochs for plotting
@@ -35,16 +37,20 @@ class MultilayerPerceptron:
 
     def feed_forward(self, w, x_i):
         
-        i = [None] * 3
-        y = [None] * 3
+        i = np.asarray([np.zeros([self.h1,1]), np.zeros([self.h2,1]), np.zeros([1,1])])
+        y = np.asarray([np.zeros([self.h1+1,1]), np.zeros([self.h2+1,1]), np.zeros([1,1])])
         
         # feed from input layer to first hidden layer
-        i[0] = np.dot(np.transpose(w[0]), x_i)
+        i[0] = np.dot(w[0], x_i)
         y[0] = self.g(i[0])
+        y[0] = np.insert(y[0], 0, -1.0)
         
         # feed from first hidden layer to last hidden layer
-        i[1] = np.dot(np.transpose(w[1]), y[0])
+        i[1] = [None] * self.h2
+        for k in range(0, self.h2):
+            i[1][k] = np.asarray(np.dot(np.transpose(w[1][k]), y[0]))
         y[1] = self.g(i[1])
+        y[1] = np.insert(y[1], 0, -1.0)
         
         # feed from last hidden layer to output layer
         i[2] = np.dot(np.transpose(w[2]), y[1])
@@ -61,12 +67,21 @@ class MultilayerPerceptron:
         w[2] = w[2] + np.multiply(np.multiply(self.n, delta[2]), y[1])
         
         # propagate from last hidden layer to first hidden layer
-        delta[1] = np.dot(delta[2], w[2]) * self.g_d(i[1])
-        w[1] = w[1] + np.multiply(np.multiply(self.n, delta[1]), y[0])
+        delta[1] = 0
+        for k in range(0, len(w[2])):
+            delta[1] += np.dot(delta[2], w[2][k]) 
+        delta[1] = np.multiply(delta[1], self.g_d(i[1]))
+        for k in range(0, len(delta[1])):
+            w[1] = w[1] + np.multiply(np.multiply(self.n, delta[1][k]), y[0])
         
         # propagate from first hidden layer to input layer
-        delta[0] = np.dot(delta[1], w[1]) * self.g_d(i[0])
-        w[0] = w[0] + np.multiply(np.multiply(self.n, delta[0]), x_i)
+        delta[0] = 0
+        for k in range(0, len(w[1])):
+            delta[0] += np.dot(delta[1][k], w[1][k])
+        adjust = np.zeros([len(delta[0]),len(w[0][0])])
+        for k in range(0, len(delta[0])):
+            adjust[k] = np.multiply(delta[0][k], self.g_d(i[0]))
+            w[0] = w[0] + np.multiply(np.multiply(self.n, adjust[k]), x_i)
         
         return w
 
@@ -76,7 +91,10 @@ class MultilayerPerceptron:
         k = len(x)
         
         # randomly initialize synaptic weights
-        w = np.random.uniform(-1.0, +1.0, (3, len(x[0])))
+        w0 = np.random.uniform(-1.0, +1.0, (self.h1, len(x[0])))
+        w1 = np.random.uniform(-1.0, +1.0, (self.h2, self.h1+1))
+        w2 = np.random.uniform(-1.0, +1.0, (self.h2+1))
+        w = [w0, w1, w2]
         
         # initialize epoch counter
         epoch = 0
@@ -108,7 +126,7 @@ class MultilayerPerceptron:
             
             # append plot data
             self.plot_data_x.append(epoch)
-            self.plot_data_y.append(eqm_delta)
+            self.plot_data_y.append(eqm_curr)
             
             # stop condition
             if eqm_delta < self.e:
@@ -131,8 +149,8 @@ if  __name__ == '__main__':
     np.set_printoptions(formatter={'float': '{: 0.6f}'.format})
 
     # load data
-    x = SampleData.BLOOD_TRANSFUSION.input
-    d = SampleData.BLOOD_TRANSFUSION.output
+    x = SampleData.DIABETES.input
+    d = SampleData.DIABETES.output
     
     # prepare data
     x = DataUtils.add_bias(x)
@@ -141,7 +159,7 @@ if  __name__ == '__main__':
     d_train,d_test = DataUtils.splitTrainTest(d)
     
     # create the neural network
-    nn = MultilayerPerceptron()
+    nn = MultilayerPerceptron(x_train, d_train)
     
     # train the neural network
     w = nn.train(x_train, d_train)
