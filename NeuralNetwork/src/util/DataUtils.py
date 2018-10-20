@@ -11,21 +11,18 @@ class DataUtils:
         pass
 
 def add_bias(arr, bias = -1):
+    ans = np.empty([len(arr), len(arr[0])+1])
     for i in range(0, len(arr)):
-        arr[i] = [bias] + arr[i]
-    return arr
+        ans[i] = np.insert(arr[i], 0, bias)
+    return ans
 
 def shuffle(x, d):
     k = len(x)
     seq = np.random.choice(range(k), k, False)
     i = 0
     for j in seq:
-        tx = x[i]
-        x[i] = x[j]
-        x[j] = tx
-        td = d[i]
-        d[i] = d[j]
-        d[j] = td
+        x[[i,j]] = x[[j,i]]
+        d[[i,j]] = d[[j,i]]
         i = i + 1
     return x,d
 

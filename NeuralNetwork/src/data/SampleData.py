@@ -7,19 +7,14 @@ Created on 5 de dez de 2017
 import numpy as np
 import os, sys
 from numpy.random import sample
+from numpy import genfromtxt
 
 class SampleData:
     
     @staticmethod
     def read(folder, filename, flatten = False):
         filename_abs = os.path.join(os.path.dirname(__file__), folder, filename)
-        data = []
-        with open(filename_abs) as file:
-            for line in file:
-                data_string = line.strip().split(',')
-                data_float = map(float, data_string)
-                data.append(data_float)
-        return [item for sublist in data for item in sublist] if flatten else data
+        return genfromtxt(filename_abs, delimiter=',', dtype=float)
 
 # https://en.wikipedia.org/wiki/AND_gate
 class LOGIC_GATE_AND:
